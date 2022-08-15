@@ -1,6 +1,7 @@
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.soecode.wxDemo.doAction.PTDJQueryAction;
 import com.soecode.wxDemo.doAction.PTDJSubmitAction;
 import com.soecode.wxDemo.utils.HttpClientUtil;
 import com.soecode.wxtools.api.WxConfig;
@@ -82,9 +83,11 @@ public class routeServlet extends HttpServlet {
             System.out.println("卡信息查询入口跳转");
             return;
         }
+
         if(baseUri.endsWith("/CardQueryInfo")) //卡信息查询
         {
             //JSONObject usderinfoJSON =wxCallBack(request,response);
+            //取得 iccid 号 后需要查询 接入号然后
 
             request.setCharacterEncoding ("UTF-8");
             response.setCharacterEncoding ("UTF-8");
@@ -92,6 +95,15 @@ public class routeServlet extends HttpServlet {
             String openid=request.getParameter("openid");
             String nickname=request.getParameter("nickname");
             String ICCID=request.getParameter("ICCID");
+
+            //从运营商查询更新平台群组号。
+            PTDJQueryAction ptdjQueryAction = new PTDJQueryAction(ICCID);
+            try {
+                String result = ptdjQueryAction.doAction();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             String testUrl="/CardQuery.jsp?openid=" + openid + "&nickname="+ nickname + "&ICCID=" + ICCID ;
             RequestDispatcher dispatcher = request.getRequestDispatcher(testUrl);
             dispatcher.forward(request,response);

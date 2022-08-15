@@ -40,7 +40,7 @@
     </form>
     <%
         //把表格第二行的显示放到while循环中，就可以根据查询结果画出表格了。参数则放在<td>内的相应位置。
-        String sql="SELECT `card_info`.`ICCID_CODE` AS `ICCID_CODE`,`card_info`.`ACCESS_CODE` AS `ACCESS_CODE`,ifnull( `card_info_ptdj`.`PTID`, '' ) AS `DJPT`,`card_info`.`CARD_STATUS` AS `CARD_STATUS`  FROM `card_info` LEFT JOIN `card_info_ptdj` ON `card_info`.`ICCID_CODE` = `card_info_ptdj`.`ICCID_CODE` where  `card_info`.`ICCID_CODE`='" + ICCID + "'";
+        String sql="SELECT `card_info_ptdj`.`ICCID_CODE` AS `ICCID_CODE`,`card_info_ptdj`.`ACCESS_CODE` AS `ACCESS_CODE`,ifnull( `card_info_ptdj`.`PTID`, '' ) AS `DJPT`,ifnull(`card_info`.`CARD_STATUS`,'') AS `CARD_STATUS`  FROM `card_info_ptdj` LEFT JOIN `card_info` ON `card_info`.`ICCID_CODE` = `card_info_ptdj`.`ICCID_CODE` where  `card_info_ptdj`.`ICCID_CODE`='" + ICCID + "'";
         System.out.println(sql);
         ResultSet rs= db.executeQuery(sql);
         while(rs.next()){
@@ -162,7 +162,7 @@
         </tr>
         <tr>
             <td style="width:100px">平台名称</td>
-            <td style="width:200px">公用平台</td>--%>
+            <td style="width:200px"><%=djpt%></td>
 <%--            <td style="width:200px"><%=djpt%></td>--%>
         </tr>
     </table>

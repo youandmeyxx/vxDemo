@@ -189,4 +189,36 @@ public class CardInfo implements Serializable {
     public void setProNetNo(String proNetNo) {
         this.proNetNo = proNetNo;
     }
+
+    public String getDescCnt() {
+        return descCnt;
+    }
+
+    public void setDescCnt(String descCnt) {
+        this.descCnt = descCnt;
+    }
+
+    public String getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(String payDate) {
+        this.payDate = payDate;
+    }
+
+    public String getPayCompany() {
+        return payCompany;
+    }
+
+    public void setPayCompany(String payCompany) {
+        this.payCompany = payCompany;
+    }
+
+    public int getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(int sourceId) {
+        this.sourceId = sourceId;
+    }
 }

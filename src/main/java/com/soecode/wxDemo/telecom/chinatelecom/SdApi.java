@@ -43,7 +43,7 @@ public class SdApi extends ChinaTelApi {
 //        String iccid_number="8986111920403305468";
         String accessCode="1064910654198";
         cardinfo.setAccessCode(accessCode);
-        System.out.println((new SdApi()).queryCardMainStatus(accessCode));
+//        System.out.println((new SdApi()).queryCardMainStatus(accessCode));
         String proNetNo=(new SdApi()).getCardIpPomainName(cardinfo);
         System.out.println(proNetNo);
         //String re = (new SdApi()).queryTraffic(access_number, false);

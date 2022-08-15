@@ -5,7 +5,9 @@
 
 package com.soecode.wxDemo.telecom.chinatelecom;
 
+import com.soecode.wxDemo.pojo.CardInfo;
 import com.soecode.wxDemo.utils.Log4jV2Util;
+import com.soecode.wxDemo.utils.XmlParseUtil;
 
 public class NtApi extends ChinaTelApi { //南通电信
     public NtApi() {
@@ -38,6 +40,16 @@ public class NtApi extends ChinaTelApi { //南通电信
 
     int initPackageNo(){return 67 ;}
 
+    /**
+     *
+     */
+    @Override
+    public String getCardIpPomainName(CardInfo cardInfo) throws Exception
+    {
+        String cadprod = apiQuery(cardInfo.getAccessCode(), "prodInstQuery", null);
+        String IpPomainName = XmlParseUtil.getNodeAttrValue (cadprod, "/SvcCont/result/prodInfos/funProdInfos","IP/域名");
+        return IpPomainName;
+    }
 
     public static void main(String... strings) throws Exception {
         Log4jV2Util.initLog4jV2TestEnv();
