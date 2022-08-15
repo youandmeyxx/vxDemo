@@ -60,6 +60,7 @@ public final class HttpGetUtil {
                 HttpClientContext context = HttpClientContext.create();
                 context.setCookieStore(cookieStore);
                 HttpClientResponseHandler<String> responseHandler = new HttpClientResponseHandler<String>() {
+                    @Override
                     public String handleResponse(ClassicHttpResponse response) throws IOException {
                         int status = response.getCode();
                         if (status >= 200 && status < 300) {

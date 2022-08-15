@@ -5,6 +5,7 @@
 
 package  com.soecode.wxDemo.telecom.chinatelecom;
 
+import com.soecode.wxDemo.pojo.CardInfo;
 import  com.soecode.wxDemo.telecom.chinatelecom.TelecomApi;
 import com.soecode.wxDemo.telecom.chinatelecom.util.DesUtils;
 import java.util.ArrayList;
@@ -13,20 +14,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.Node;
-//import org.wbase.framework.core.anyware.ServiceAnyWare;
-//import org.wbase.framework.core.utils.DateUtil;
-//import org.wbase.framework.core.utils.DisplayUtil;
+
 import com.soecode.wxDemo.utils.HttpGetUtil;
 import com.soecode.wxDemo.utils.StringUtil;
-//import org.wbase.framework.core.utils.UniframeworkDouble;
-//import org.wbase.framework.core.utils.XmlParseUtil;
+import com.soecode.wxDemo.utils.XmlParseUtil;
 
-public abstract class ChinaTelApi implements TelecomApi {
+public abstract class ChinaTelApi {
     protected static String api_queryaware_prefix = "http://api.ct10649.com:9001/m2m_ec/query.do?method=";
     protected static String api_serviceactaware_prefix = "http://api.ct10649.com:9001/m2m_ec/app/serviceAccept.do?method=";
 
@@ -42,6 +35,17 @@ public abstract class ChinaTelApi implements TelecomApi {
     abstract String key2();
 
     abstract String key3();
+
+
+    /**
+     *
+     */
+    public String getCardIpPomainName(CardInfo cardInfo) throws Exception
+    {
+        String cadprod = apiQuery(cardInfo.getAccessCode(), "prodInstQuery", null);
+        String IpPomainName = XmlParseUtil.getNodeAttrValue (cadprod, "/SvcCont/result/prodInfos/funProdInfos","IP/域名");
+        return IpPomainName;
+    }
 
     public String apiOffNetQuery(String access_number, String queryMethodName, Map<String, String> extraParameterMap, String action, String quota, String type) {
         try {
@@ -218,19 +222,19 @@ public abstract class ChinaTelApi implements TelecomApi {
     }
 
 
-    public String queryTraffic(String access_number, boolean withDetail) throws DocumentException {
-        Map<String, String> extraParameterMap = new HashMap();
-        extraParameterMap.put("needDtl", withDetail ? "1" : "0");
-        String traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
-        if (traffic != null && traffic.startsWith("100008")) {
-            extraParameterMap.put("needDtl", "0");
-            traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
-        }
-
-        Element bytes = ((Element)DocumentHelper.parseText(traffic).getRootElement().elements().get(0)).element("TOTAL_BYTES_CNT");
-        String used = bytes.getTextTrim();
-        return used.replace("MB", "");
-    }
+//    public String queryTraffic(String access_number, boolean withDetail) throws DocumentException {
+//        Map<String, String> extraParameterMap = new HashMap();
+//        extraParameterMap.put("needDtl", withDetail ? "1" : "0");
+//        String traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
+//        if (traffic != null && traffic.startsWith("100008")) {
+//            extraParameterMap.put("needDtl", "0");
+//            traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
+//        }
+//
+//        Element bytes = ((Element)DocumentHelper.parseText(traffic).getRootElement().elements().get(0)).element("TOTAL_BYTES_CNT");
+//        String used = bytes.getTextTrim();
+//        return used.replace("MB", "");
+//    }
 
     public String prodInstQuery(String access_number) {
         return this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), (Map)null);
@@ -241,123 +245,125 @@ public abstract class ChinaTelApi implements TelecomApi {
     }
 
 
-    public String offNetAction(String access_number, long quota) {
-        Map<String, String> map = new HashMap();
-        map.put("type", "1");
-        map.put("action", "2");
-        map.put("quota", String.valueOf(quota));
-        return this.apiOffNetQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), map, (String)map.get("quota"), (String)map.get("action"), (String)map.get("type"));
-    }
+//    @Override
+//    public String offNetAction(String access_number, long quota) {
+//        Map<String, String> map = new HashMap();
+//        map.put("type", "1");
+//        map.put("action", "2");
+//        map.put("quota", String.valueOf(quota));
+//        return this.apiOffNetQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), map, (String)map.get("quota"), (String)map.get("action"), (String)map.get("type"));
+//    }
+//
+//    public String getCardStatusName(String access_number) throws DocumentException {
+//        Document doc = DocumentHelper.parseText(this.prodInstQuery(access_number));
+//        String prodStatusName ="";
+//        return prodStatusName;
+//    }
+//
+//    public boolean isThisCardRun(String access_number) {
+//        try {
+//            return this.getCardStatusName(access_number).equalsIgnoreCase("在用");
+//        } catch (Exception var3) {
+//            return false;
+//        }
+//    }
 
-    public String getCardStatusName(String access_number) throws DocumentException {
-        Document doc = DocumentHelper.parseText(this.prodInstQuery(access_number));
-        String prodStatusName ="";
-        return prodStatusName;
-    }
+//    public boolean isOffNet(String access_number) {
+//        boolean isOffNet = false;
+//
+//        try {
+//            new ArrayList();
+//            String cadprod = this.prodInstQuery(access_number);
+//            Document doc = DocumentHelper.parseText(cadprod);
+//            List<Node> nodelist = doc.selectNodes("/SvcCont/result/prodInfos/funProdInfos/attrInfos");
+//            Iterator var8 = nodelist.iterator();
+//
+//            while(var8.hasNext()) {
+//                Node attrnode = (Node)var8.next();
+//                String name = attrnode.selectSingleNode("attrName").getText();
+//                if (name.startsWith("是否已达量断网")) {
+//                    String value = attrnode.selectSingleNode("attrValue").getText();
+//                    isOffNet = value.equals("是");
+//                    break;
+//                }
+//            }
+//        } catch (Exception var11) {
+//            var11.printStackTrace();
+//        }
+//
+//        return isOffNet;
+//    }
 
-    public boolean isThisCardRun(String access_number) {
-        try {
-            return this.getCardStatusName(access_number).equalsIgnoreCase("在用");
-        } catch (Exception var3) {
-            return false;
-        }
-    }
+//    @Override
+//    public long getOffNetQuota(String access_number) throws Exception {
+//        long quota = 0L;
+//        new ArrayList();
+//        String cadprod = this.prodInstQuery(access_number);
+//        Document doc = DocumentHelper.parseText(cadprod);
+//        List<Node> attrnodelist = doc.selectNodes("/SvcCont/result/prodInfos/funProdInfos/attrInfos");
+//        Iterator var9 = attrnodelist.iterator();
+//
+//        while(var9.hasNext()) {
+//            Node attrnode = (Node)var9.next();
+//            String name = attrnode.selectSingleNode("attrName").getText();
+//            if (name.startsWith("断网阀值")) {
+//                String value = attrnode.selectSingleNode("attrValue").getText();
+//                quota = Long.parseLong(value);
+//                break;
+//            }
+//        }
+//
+//        return quota;
+//    }
 
-    public boolean isOffNet(String access_number) {
-        boolean isOffNet = false;
+//    public boolean isThisPackageFlowOrdered(String access_number, String flowValue) {
+//        boolean isOrdered = false;
+//
+//        try {
+//            List<Node> nodelist = DocumentHelper.parseText(this.prodInstQuery(access_number)).selectNodes("/SvcCont/result/prodInfos/prodOfferInfos");
+//            Iterator var6 = nodelist.iterator();
+//
+//            while(var6.hasNext()) {
+//                Node node = (Node)var6.next();
+//                if (!StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr")) && !StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr").getText()) && flowValue.equals(node.selectSingleNode("prodOfferNbr").getText())) {
+//                    isOrdered = true;
+//                }
+//            }
+//        } catch (Exception var7) {
+//            var7.printStackTrace();
+//        }
+//
+//        return isOrdered;
+//    }
 
-        try {
-            new ArrayList();
-            String cadprod = this.prodInstQuery(access_number);
-            Document doc = DocumentHelper.parseText(cadprod);
-            List<Node> nodelist = doc.selectNodes("/SvcCont/result/prodInfos/funProdInfos/attrInfos");
-            Iterator var8 = nodelist.iterator();
-
-            while(var8.hasNext()) {
-                Node attrnode = (Node)var8.next();
-                String name = attrnode.selectSingleNode("attrName").getText();
-                if (name.startsWith("是否已达量断网")) {
-                    String value = attrnode.selectSingleNode("attrValue").getText();
-                    isOffNet = value.equals("是");
-                    break;
-                }
-            }
-        } catch (Exception var11) {
-            var11.printStackTrace();
-        }
-
-        return isOffNet;
-    }
-
-    public long getOffNetQuota(String access_number) throws Exception {
-        long quota = 0L;
-        new ArrayList();
-        String cadprod = this.prodInstQuery(access_number);
-        Document doc = DocumentHelper.parseText(cadprod);
-        List<Node> attrnodelist = doc.selectNodes("/SvcCont/result/prodInfos/funProdInfos/attrInfos");
-        Iterator var9 = attrnodelist.iterator();
-
-        while(var9.hasNext()) {
-            Node attrnode = (Node)var9.next();
-            String name = attrnode.selectSingleNode("attrName").getText();
-            if (name.startsWith("断网阀值")) {
-                String value = attrnode.selectSingleNode("attrValue").getText();
-                quota = Long.parseLong(value);
-                break;
-            }
-        }
-
-        return quota;
-    }
-
-    public boolean isThisPackageFlowOrdered(String access_number, String flowValue) {
-        boolean isOrdered = false;
-
-        try {
-            List<Node> nodelist = DocumentHelper.parseText(this.prodInstQuery(access_number)).selectNodes("/SvcCont/result/prodInfos/prodOfferInfos");
-            Iterator var6 = nodelist.iterator();
-
-            while(var6.hasNext()) {
-                Node node = (Node)var6.next();
-                if (!StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr")) && !StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr").getText()) && flowValue.equals(node.selectSingleNode("prodOfferNbr").getText())) {
-                    isOrdered = true;
-                }
-            }
-        } catch (Exception var7) {
-            var7.printStackTrace();
-        }
-
-        return isOrdered;
-    }
-
-    public boolean isThisPackageFlowUnScribed(String access_number, String flowValue) {
-        boolean isUnscribed = false;
-
-        try {
-            boolean existNbr = false;
-            List<Node> nodelist = DocumentHelper.parseText(this.prodInstQuery(access_number)).selectNodes("/SvcCont/result/prodInfos/prodOfferInfos");
-            Iterator var7 = nodelist.iterator();
-
-            while(var7.hasNext()) {
-                Node node = (Node)var7.next();
-                if (!StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr")) && !StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr").getText()) && flowValue.equals(node.selectSingleNode("prodOfferNbr").getText()) && "将失效".equalsIgnoreCase(node.selectSingleNode("statusName").getText())) {
-                    return true;
-                }
-
-                if (!StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr")) && !StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr").getText()) && flowValue.equals(node.selectSingleNode("prodOfferNbr").getText()) && "有效".equalsIgnoreCase(node.selectSingleNode("statusName").getText())) {
-                    existNbr = true;
-                }
-            }
-
-            if (!existNbr) {
-                isUnscribed = true;
-            }
-        } catch (Exception var8) {
-            var8.printStackTrace();
-        }
-
-        return isUnscribed;
-    }
+//    public boolean isThisPackageFlowUnScribed(String access_number, String flowValue) {
+//        boolean isUnscribed = false;
+//
+//        try {
+//            boolean existNbr = false;
+//            List<Node> nodelist = DocumentHelper.parseText(this.prodInstQuery(access_number)).selectNodes("/SvcCont/result/prodInfos/prodOfferInfos");
+//            Iterator var7 = nodelist.iterator();
+//
+//            while(var7.hasNext()) {
+//                Node node = (Node)var7.next();
+//                if (!StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr")) && !StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr").getText()) && flowValue.equals(node.selectSingleNode("prodOfferNbr").getText()) && "将失效".equalsIgnoreCase(node.selectSingleNode("statusName").getText())) {
+//                    return true;
+//                }
+//
+//                if (!StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr")) && !StringUtil.isEmpty(node.selectSingleNode("prodOfferNbr").getText()) && flowValue.equals(node.selectSingleNode("prodOfferNbr").getText()) && "有效".equalsIgnoreCase(node.selectSingleNode("statusName").getText())) {
+//                    existNbr = true;
+//                }
+//            }
+//
+//            if (!existNbr) {
+//                isUnscribed = true;
+//            }
+//        } catch (Exception var8) {
+//            var8.printStackTrace();
+//        }
+//
+//        return isUnscribed;
+//    }
 
     public String queryCardMainStatus(String access_number) {
         return this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), (Map)null);

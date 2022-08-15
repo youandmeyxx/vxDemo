@@ -1,6 +1,13 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="vxDemo:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/vxDemo_war_exploded</output-path>
+    <output-path>$PROJECT_DIR$/target/vxDemo</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>vxDemo</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -23,9 +30,14 @@
           <element id="library" level="project" name="Maven: xmlpull:xmlpull:1.1.3.1" />
           <element id="library" level="project" name="Maven: xpp3:xpp3_min:1.1.4c" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
-          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-annotations-api:9.0.54" />
           <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.54" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-annotations-api:9.0.54" />
+          <element id="library" level="project" name="Maven: dom4j:dom4j:2.1.3" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils-core:1.8.3" />
         </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/vxDemo/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="vxDemo/web/Web" />
     </root>

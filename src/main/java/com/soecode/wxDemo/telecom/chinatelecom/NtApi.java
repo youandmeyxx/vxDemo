@@ -11,22 +11,27 @@ public class NtApi extends ChinaTelApi { //南通电信
     public NtApi() {
     }
 
+    @Override
     String userId() {
         return "w0sw0Uq3cPnXt1wQfcI36amy0FBE162N";
     }
 
+    @Override
     String password() {
         return "5hB5w24zzQmCxWfu";
     }
 //in8l97dAP
+@Override
     String key1() {
         return "in8";
     }
 
+    @Override
     String key2() {
         return "l97";
     }
 
+    @Override
     String key3() {
         return "dAP";
     }
