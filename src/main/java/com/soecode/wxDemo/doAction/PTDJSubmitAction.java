@@ -124,12 +124,13 @@ public class PTDJSubmitAction {
         if(info.equals("SUCCESS")){
             //todo 保存工单信息 发送受理模板信息
             DbHelper db= new DbHelper();
-            String sql= " insert into card_ptdj_work_order (WORK_ORDER_NO,CREATE_TIME,STATE,FINISH_TIME,UPDATE_TIME,VERSION,DESC_CNT) values (";
+            String sql= " insert into card_ptdj_work_order (WORK_ORDER_NO,CREATE_TIME,STATE,FINISH_TIME,UPDATE_TIME,OPEN_ID,VERSION,DESC_CNT) values (";
             sql=sql+workOrderNo + ","; //WORK_ORDER_NO
             sql=sql+"'"+ df.format(new Date()) +"',"; //CREATE_TIME
             sql=sql+"0,"; //STATE
             sql=sql+"'',"; //FINISH_TIME
             sql=sql+"'" + df.format(new Date()) + "',"; //UPDATE_TIME
+            sql=sql+"'" + openid + "',";
             sql=sql+"0,"; //VERSION
             sql=sql+"''"; //DESC_CNT
             sql=sql+")";
