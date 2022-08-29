@@ -3,6 +3,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.soecode.wxDemo.doAction.PTDJQueryAction;
 import com.soecode.wxDemo.doAction.PTDJSubmitAction;
+import com.soecode.wxDemo.doAction.TemplateSenderAction;
 import com.soecode.wxDemo.utils.HttpClientUtil;
 import com.soecode.wxtools.api.WxConfig;
 
@@ -109,6 +110,12 @@ public class routeServlet extends HttpServlet {
             dispatcher.forward(request,response);
             System.out.println(testUrl);
             System.out.println("卡信息查询");
+        }
+
+        if(baseUri.endsWith("/templatesender")) //发送模板信息
+        {
+            TemplateSenderAction templateSenderAction = new TemplateSenderAction();
+            templateSenderAction.templateSenderTest();
         }
 
     }

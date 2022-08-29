@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
-    <title>平台登记</title>
+    <title>平台变更登记</title>
 </head>
 <body>
 <%
@@ -23,7 +23,7 @@
     <form name="mainForm" method="get" action="/ptdj/submit" target="hidden_frame" >
         <input type="hidden" id="openid" name="openid" value="<%=openid%>">
         <input type="hidden" id="nickname" name="nickname" value="<%=nickname%>">
-        <textarea id="iccid" name="iccid" rows="16" style="width:300px" placeholder="请输入卡号或ICCID号(一行一个)。连号的用#连接，比如：8986111920403305000#8986111920403305999，每次最多提交2000张" ></textarea><br><br>
+        <textarea id="iccid" name="iccid" rows="16" style="width:300px" placeholder="请输入卡号或ICCID号(一行一个)。连号的用#连接，比如：8986111920403305000#8986111920403305999，每次最多提交250张" ></textarea><br><br>
         <select id="djpt" name="djpt" style="width:300px" >
             <option value="0">请选择...</option>
             <%
@@ -48,7 +48,6 @@
     {
         alert(jsmsg);
     }
-
 </script>
 
 <style type="text/css" >

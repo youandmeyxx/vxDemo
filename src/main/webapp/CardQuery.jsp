@@ -69,10 +69,10 @@
                     djpt="博纳德";
                     break;
                 case "3":
-                    djpt="卓志达";
+                    djpt="卓智达";
                     break;
                 case "4":
-                    djpt="河南宝蓝";
+                    djpt="宝蓝";
                     break;
                 case "5":
                     djpt="善理";
@@ -132,7 +132,7 @@
                     djpt="云鑫城";
                     break;
                 case "24":
-                    djpt="海王星";
+                    djpt="天横海王星平台";
                     break;
                 case "25":
                     djpt="深圳亿点";
