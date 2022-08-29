@@ -16,8 +16,13 @@ public class PTDJSubmitAction {
     static String  nickname="";
     static String  iccid="";
     static String  djpt="";
+    static String workOrderNo="";
     HttpServletRequest request;
     HttpServletResponse response;
+    DbHelper db= new DbHelper();
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
+    public PTDJSubmitAction(){}
 
     public  PTDJSubmitAction(HttpServletRequest vrequest, HttpServletResponse vresponse)
     {
@@ -27,13 +32,14 @@ public class PTDJSubmitAction {
         djpt=vrequest.getParameter("djpt");
         request=vrequest;
         response=vresponse;
+        workOrderNo=getWorkOrderNo();
 
     }
 
     public String doAction(){
         try {
-
-            String str = dealICCIDString(iccid, openid, nickname, djpt);
+            //生成工单号
+            String str = dealICCIDString(iccid, openid, nickname, djpt,workOrderNo);
             //提示后跳转登记页面
 
             String testUrl="/test.jsp?openid=" + openid + "&nickname="+ nickname + "&msg=" + str;
@@ -66,13 +72,13 @@ public class PTDJSubmitAction {
      * @param DJPT
      * @return
      */
-    private String dealICCIDString(String ICCID,String openid,String nickname,String DJPT) throws SQLException {
+    public String dealICCIDString(String ICCID,String openid,String nickname,String DJPT,String workOrderNo) throws SQLException {
         String[] ICCIDArray=ICCID.split("\n");
         String info="";
         for (String strICCID : ICCIDArray){
             int sICCID,bICCID;
 
-            if(strICCID.contains("#")) //#
+            if(strICCID.contains("#"))
             {
                 System.out.println(strICCID);
                 int b=0;
@@ -86,7 +92,8 @@ public class PTDJSubmitAction {
                 System.out.println(sICCID + "  " + bICCID);
                 System.out.println(tp1 + "  " + tp2);
                 System.out.println(Math.abs(sICCID-bICCID));
-                if(Math.abs(sICCID-bICCID)<250 && tp1.equalsIgnoreCase(tp2) ) //判断前后字串大小
+                //判断前后字串大小
+                if(Math.abs(sICCID-bICCID)<250 && tp1.equalsIgnoreCase(tp2) )
                 {
                     if(sICCID>bICCID) {
                         b = bICCID;
@@ -106,12 +113,30 @@ public class PTDJSubmitAction {
 
                 for(int i=b;i<=e;i++)
                 {
-                    info = saveICCID(tp1+String.valueOf(i), openid, nickname, DJPT);
+                    info = saveICCID(tp1+String.valueOf(i), openid, nickname, DJPT,workOrderNo);
                 }
             } else {
                 System.out.println("spliticcid:" + strICCID);
-                info = saveICCID(strICCID, openid, nickname, DJPT);
+                info = saveICCID(strICCID, openid, nickname, DJPT,workOrderNo);
             }
+        }
+//        templateSenderAction.templateSenderTest();
+        if(info.equals("SUCCESS")){
+            //todo 保存工单信息 发送受理模板信息
+            DbHelper db= new DbHelper();
+            String sql= " insert into card_ptdj_work_order (WORK_ORDER_NO,CREATE_TIME,STATE,FINISH_TIME,UPDATE_TIME,VERSION,DESC_CNT) values (";
+            sql=sql+workOrderNo + ","; //WORK_ORDER_NO
+            sql=sql+"'"+ df.format(new Date()) +"',"; //CREATE_TIME
+            sql=sql+"0,"; //STATE
+            sql=sql+"'',"; //FINISH_TIME
+            sql=sql+"'" + df.format(new Date()) + "',"; //UPDATE_TIME
+            sql=sql+"0,"; //VERSION
+            sql=sql+"''"; //DESC_CNT
+            sql=sql+")";
+            db.execute(sql);
+            db.close();
+            TemplateSenderAction templateSenderAction = new TemplateSenderAction("平台变更登记","受理",workOrderNo,"受理成功","谢谢合作！","#173177" );
+            templateSenderAction.templateSend();
         }
         return info;
     }
@@ -140,7 +165,9 @@ public class PTDJSubmitAction {
      * @param nickname
      * @return
      */
-    private String saveICCID(String ICCID,String openid,String nickname,String PTID) throws SQLException {
+    private String saveICCID(String ICCID,String openid,String nickname,String PTID,String workOrderNo) throws SQLException {
+        String info="";
+
         ICCID=ICCID.replaceAll("\n|\t|\r","");
         if(!checkICCID(ICCID))
         {
@@ -151,8 +178,7 @@ public class PTDJSubmitAction {
             System.out.println("平台选择错误!");
             return "平台选择错误!"; //如过iccid非法直接返回
         }
-        DbHelper db= new DbHelper();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
         df.format(new Date());
         //先查询数据库是否有这个ICCID 底下是否有此卡
         String sql="select * from card_info_ptdj where ICCID_CODE='" + ICCID + "'";
@@ -170,10 +196,12 @@ public class PTDJSubmitAction {
                 if(rs.getString("PTID")!=null)
                 {PTID_OLD = rs.getString("PTID").toString();}
                 String  SOURCE_ID= rs.getString("SOURCE_ID").toString();
-                sql="insert into card_ptdj (ICCID_CODE,OPEN_ID,NICK_NAME,PTID,PTID_OLD,DJRQ,GXRQ,SOURCE_ID,IS_OK,VERSION) values ('" + ICCID + "','" + openid + "','" + nickname + "'," + PTID + "," + PTID_OLD + ",'" + df.format(new Date()) + "','" + df.format(new Date()) + "','" + SOURCE_ID + "',0,0)";
+                sql="insert into card_ptdj (ICCID_CODE,OPEN_ID,NICK_NAME,PTID,PTID_OLD,DJRQ,GXRQ,SOURCE_ID,IS_OK,VERSION,WORK_ORDER_NO) values ('" + ICCID + "','" + openid + "','" + nickname + "'," + PTID + "," + PTID_OLD + ",'" + df.format(new Date()) + "','" + df.format(new Date()) + "','" + SOURCE_ID + "',0,0,'"+ workOrderNo +"')";
                 System.out.println(sql);
                 db.execute(sql);
                 System.out.println("SUCCESS");
+
+                db.close();
                 return "SUCCESS";
             }
             else if(rs.getString("OPEN_ID")==null || rs.getString("OPEN_ID").equals("") ) //未登记用户，登记一下
@@ -208,10 +236,16 @@ public class PTDJSubmitAction {
         System.out.println("该卡号不是本方运营卡号请和客服联系确认！");
         return "该卡号不是本方运营卡号请和客服联系确认！";
     }
-    public static void main(String[] args) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-        df.format(new Date());
-        System.out.println(df.format(new Date()));
+
+
+    public String getWorkOrderNo()
+    {
+        return String.valueOf(System.currentTimeMillis());
+    }
+
+    public static void main(String[] args) throws SQLException {
+        PTDJSubmitAction ptdjSubmitAction = new PTDJSubmitAction();
+        ptdjSubmitAction.dealICCIDString("8986032143200865457","or0bLwVzu8m6EZU6HOk_nn4cS_4Y","张操","1",ptdjSubmitAction.getWorkOrderNo());
     }
 
 

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -114,8 +115,8 @@ public class routeServlet extends HttpServlet {
 
         if(baseUri.endsWith("/templatesender")) //发送模板信息
         {
-            TemplateSenderAction templateSenderAction = new TemplateSenderAction();
-            templateSenderAction.templateSenderTest();
+            TemplateSenderAction templateSenderAction = new TemplateSenderAction("平台变更登记","受理","工单编号","服务情况","谢谢合作！","#173177" );
+            templateSenderAction.templateSend();
         }
 
     }

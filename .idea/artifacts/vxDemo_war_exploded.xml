@@ -6,7 +6,6 @@
         <exploded>true</exploded>
         <module>vxDemo</module>
         <packaging>war</packaging>
-        <unpackNestedArchives>false</unpackNestedArchives>
       </options>
     </properties>
     <root id="root">
@@ -37,7 +36,6 @@
           <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils-core:1.8.3" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.62" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-configuration-processor:2.7.1" />
-          <element id="library" level="project" name="lib" />
         </element>
       </element>
       <element id="directory" name="META-INF">
