@@ -24,8 +24,8 @@ public class Menu {
 
     private static void templateSenderTest()
     {
-//        TemplateSenderAction templateSenderAction = new TemplateSenderAction();
-//        templateSenderAction.templateSenderTest();
+//        TemplateSenderAction templateSenderAction = new TemplateSenderAction("平台变更登记","受理","11122555","受理成功","谢谢合作！","#173177" );
+//        templateSenderAction.templateSend();
     }
 
 

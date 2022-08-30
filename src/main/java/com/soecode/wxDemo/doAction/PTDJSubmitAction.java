@@ -134,9 +134,11 @@ public class PTDJSubmitAction {
             sql=sql+"0,"; //VERSION
             sql=sql+"''"; //DESC_CNT
             sql=sql+")";
+            System.out.println(sql);
             db.execute(sql);
             db.close();
-            TemplateSenderAction templateSenderAction = new TemplateSenderAction("平台变更登记","受理",workOrderNo,"受理成功","谢谢合作！","#173177" );
+            String url="http://iotv3.iot-chuanglin.com/WorkOrderQuery.jsp?workOrderNo=" + workOrderNo;
+            TemplateSenderAction templateSenderAction = new TemplateSenderAction("平台变更登记","受理",workOrderNo,"受理成功","谢谢合作！","#173177",openid,url);
             templateSenderAction.templateSend();
         }
         return info;

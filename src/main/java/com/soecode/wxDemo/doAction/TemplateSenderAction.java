@@ -18,14 +18,18 @@ public class TemplateSenderAction {
     private String keyword3Str="";
     private String remarkStr="";
     private String colorStr="";
+    private String openid="";
+    private String url="";
 
-    public TemplateSenderAction(String firstStr, String keyword1Str,String keyword2Str,String keyword3Str,String remarkStr,String colorStr ){
+    public TemplateSenderAction(String firstStr, String keyword1Str,String keyword2Str,String keyword3Str,String remarkStr,String colorStr,String openid,String url ){
         this.firstStr=firstStr;
         this.keyword1Str=keyword1Str;
         this.keyword2Str=keyword2Str;
         this.keyword3Str=keyword3Str;
         this.remarkStr=remarkStr;
         this.colorStr=colorStr;
+        this.openid=openid;
+        this.url=url;
     }
 
     public void templateSend()
@@ -37,12 +41,12 @@ public class TemplateSenderAction {
         Template.TemplateData remark = new Template.TemplateData(remarkStr,colorStr);
         IService iService = new WxService();
         TemplateSender sender = new TemplateSender();
-        sender.setTouser("or0bLwVzu8m6EZU6HOk_nn4cS_4Y");
+        sender.setTouser(openid);
         sender.setTemplate_id("B1XXw0se3I7KtPAk74Ka-hXTWtzdsjI_9Qhl3-tBTaQ");
 
         Template template = new Template(first,keyword1,keyword2,keyword3,remark);
         sender.setData(template);
-        sender.setUrl("url");
+        sender.setUrl(url);
         try {
             System.out.println(sender.toJson());
             TemplateSenderResult result = iService.templateSend(sender);

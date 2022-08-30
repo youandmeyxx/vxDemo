@@ -86,6 +86,16 @@ public class routeServlet extends HttpServlet {
             return;
         }
 
+        if(baseUri.endsWith("/WorkOrderQuery"))
+        {
+            JSONObject usderinfoJSON =wxCallBack(request,response);
+            String testUrl="/WorkOrderQuery.jsp?openid=" + usderinfoJSON.getString("openid") + "&nickname="+ usderinfoJSON.getString("nickname")+"&ICCID=";
+            request.getRequestDispatcher(testUrl).forward(request,response);
+            System.out.println(testUrl);
+            System.out.println("卡信息查询入口跳转");
+            return;
+        }
+
         if(baseUri.endsWith("/CardQueryInfo")) //卡信息查询
         {
             //JSONObject usderinfoJSON =wxCallBack(request,response);
@@ -113,11 +123,11 @@ public class routeServlet extends HttpServlet {
             System.out.println("卡信息查询");
         }
 
-        if(baseUri.endsWith("/templatesender")) //发送模板信息
-        {
-            TemplateSenderAction templateSenderAction = new TemplateSenderAction("平台变更登记","受理","工单编号","服务情况","谢谢合作！","#173177" );
-            templateSenderAction.templateSend();
-        }
+//        if(baseUri.endsWith("/templatesender")) //发送模板信息
+//        {
+//            TemplateSenderAction templateSenderAction = new TemplateSenderAction("平台变更登记","受理","工单编号","服务情况","谢谢合作！","#173177" );
+//            templateSenderAction.templateSend();
+//        }
 
     }
 
