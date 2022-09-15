@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.soecode.wxDemo.telecom.chinatelecom.util.JSONUtils;
 import com.soecode.wxDemo.utils.HttpGetUtil;
 import com.soecode.wxDemo.utils.StringUtil;
 import com.soecode.wxDemo.utils.XmlParseUtil;
@@ -219,6 +220,22 @@ public abstract class ChinaTelApi {
         //Element bytes = ((Element)DocumentHelper.parseText(ReRecord).getRootElement().elements().get(0)).element("RspDesc");
         //String used = bytes.getTextTrim();
         return ReRecord;
+    }
+
+
+    public String getOnlineStatus(String access_number){
+        Map<String, String> extraParameterMap = new HashMap();
+        Map<String, Object> onlineStatusMap=null;
+        String onlineStatus = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
+        if (onlineStatus != null ) {
+            onlineStatusMap = (HashMap<String, Object>) JSONUtils.jsonParse(onlineStatus);
+            if(onlineStatusMap.get("imei")!=null) {
+                onlineStatus = onlineStatusMap.get("imei").toString();
+                return onlineStatus;
+            }
+        }
+        onlineStatus="";
+        return onlineStatus;
     }
 
 

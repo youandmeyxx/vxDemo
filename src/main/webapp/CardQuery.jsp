@@ -11,7 +11,12 @@
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
     String openid=request.getParameter("openid");
-    String ICCID=request.getParameter("ICCID");
+    String ICCID=request.getParameter("iccid");
+    String packageName=request.getParameter("packageName");
+    String inValidTime=request.getParameter("inValidTime");
+    String usedFlow=request.getParameter("usedFlow");
+    String leftFlow=request.getParameter("leftFlow");
+    String imei=request.getParameter("imei");
     String cardStatus="";
     String djpt="";
     String nickname=request.getParameter("nickname");
@@ -36,7 +41,7 @@
     <form enctype="multipart/form-data" method="get" name="cardinfo" action="/ptdj/CardQueryInfo">
         <input type="hidden" id="openid" name="openid" value="<%=openid%>">
         <input type="hidden" id="nickname" name="nickname" value="<%=nickname%>">
-        &nbsp;<input name="ICCID" class="btn1" placeholder="请输入卡号或ICCID号" ><input type="submit" class="btn" value="查询" name="bntQuery">
+        &nbsp;<input name="iccid" class="btn1" placeholder="请输入卡号或ICCID号" ><input type="submit" class="btn" value="查询" name="bntQuery">
     </form>
     <%
         //把表格第二行的显示放到while循环中，就可以根据查询结果画出表格了。参数则放在<td>内的相应位置。
@@ -143,6 +148,7 @@
 
 
             }
+            //读取
     %>
     <table>
         <tr >
@@ -163,9 +169,30 @@
         <tr>
             <td style="width:100px">平台名称</td>
             <td style="width:200px"><%=djpt%></td>
-<%--            <td style="width:200px"><%=djpt%></td>--%>
+        </tr>
+        <tr>
+            <td style="width:100px">当前套餐</td>
+            <td style="width:200px"><%=packageName%></td>
+        </tr>
+        <tr>
+            <td style="width:100px">IMEI</td>
+            <td style="width:200px"><%=imei%></td>
+        </tr>
+        <tr>
+            <td style="width:100px">已用流量</td>
+            <td style="width:200px"><%=usedFlow%></td>
+        </tr>
+        <tr>
+            <td style="width:100px">剩余流量</td>
+            <td style="width:200px"><%=leftFlow%></td>
+        </tr>
+        <tr>
+            <td style="width:100px">有效期</td>
+            <td style="width:200px"><%=inValidTime%></td>
         </tr>
     </table>
+<%--    <button type="submit" class="btn1" formaction="/ptdj/directorderflowpackage">查询记录</button><br>--%>
+
     <%}
 //注意"}"的位置 %>
 

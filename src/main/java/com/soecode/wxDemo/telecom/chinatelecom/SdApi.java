@@ -6,7 +6,11 @@
 package com.soecode.wxDemo.telecom.chinatelecom;
 
 import com.soecode.wxDemo.pojo.CardInfo;
+import com.soecode.wxDemo.telecom.chinatelecom.util.JSONUtils;
 import com.soecode.wxDemo.utils.Log4jV2Util;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SdApi extends ChinaTelApi {
     public SdApi() {
@@ -41,11 +45,13 @@ public class SdApi extends ChinaTelApi {
         Log4jV2Util.initLog4jV2TestEnv();
         CardInfo cardinfo = new CardInfo();
 //        String iccid_number="8986111920403305468";
-        String accessCode="1064910654198";
+        String accessCode="1410419685269";
         cardinfo.setAccessCode(accessCode);
 //        System.out.println((new SdApi()).queryCardMainStatus(accessCode));
-        String proNetNo=(new SdApi()).getCardIpPomainName(cardinfo);
-        System.out.println(proNetNo);
+        String onlineStatus=(new SdApi()).getOnlineStatus(accessCode);
+//        String onlineStatus="{\"resultCode\":\"0\",\"resultMsg\":\"处理成功！\",\"groupTransactionId\":\"1000000190202208310180522281\",\"description\":{\"result\":\"-1\",\"msisdn\":\"861410419685269\",\"imsi\":\"460113422075161\",\"netModel\":\"2\",\"acctStatusType\":\"stop\",\"eventTimestamp\":\"2022-08-27 17:13:48\",\"framedIpAddress\":\"10.11.9.102\",\"framedIpv6Prefix\":\"\",\"framedInterfaceId\":\"\",\"apn\":\"shjj4.grevpdn.sd\",\"rattype\":\"6\",\"imei\":\"8637630516906323\",\"provname\":\"山东\",\"duration\":\"83316\",\"stopTime\":\"2022-08-27 17:13:48\",\"startTime\":\"\"}}";
+//        Map<String, Object> onlineStatusMap = (HashMap<String, Object>) JSONUtils.jsonParse(onlineStatus);
+        System.out.println(onlineStatus);
         //String re = (new SdApi()).queryTraffic(access_number, false);
 //        long a = (new SdApi()).getOffNetQuota(access_number);
 //        boolean isOFF = (new SdApi()).isOffNet(access_number);
