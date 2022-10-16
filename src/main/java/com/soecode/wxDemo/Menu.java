@@ -1,14 +1,10 @@
 package com.soecode.wxDemo;
 
 import com.soecode.wxDemo.constants.MenuKey;
-import com.soecode.wxDemo.constants.Template;
-import com.soecode.wxDemo.doAction.TemplateSenderAction;
 import com.soecode.wxtools.api.IService;
 import com.soecode.wxtools.api.WxConsts;
 import com.soecode.wxtools.api.WxService;
-import com.soecode.wxtools.bean.TemplateSender;
 import com.soecode.wxtools.bean.WxMenu;
-import com.soecode.wxtools.bean.result.TemplateSenderResult;
 import com.soecode.wxtools.exception.WxErrorException;
 
 import java.util.ArrayList;
@@ -17,9 +13,11 @@ import java.util.List;
 
 public class Menu {
 
-    public static void main(String[] args) {
-//        addMenu();
-        templateSenderTest();
+    public static void main(String[] args) throws WxErrorException {
+        addMenu();
+//        templateSenderTest();
+//        MyWxService iService = new MyWxService();
+//        System.out.println("weixin accesstoken:" + iService.getAccessToken());
     }
 
     private static void templateSenderTest()
@@ -43,27 +41,28 @@ public class Menu {
         WxMenu.WxMenuButton btn1_1 = new WxMenu.WxMenuButton();
         btn1_1.setType(WxConsts.MENU_BUTTON_VIEW);
         btn1_1.setKey(MenuKey.HOT_SONG);
-        btn1_1.setUrl("http://wxkd.iot-chuanglin.com/iot/iotCeslogin.html");
+        btn1_1.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx271bedf2ce298d26&redirect_uri=http://wxtest.iot-chuanglin.com:8022/ptdj/CardQuery&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect");
         //btn1_1.setUrl("http://3813t60g36.zicp.vip/wx/chongzhi");
         btn1_1.setName("查询充值");
 
         WxMenu.WxMenuButton btn1_2 = new WxMenu.WxMenuButton();
         btn1_2.setType(WxConsts.MENU_BUTTON_VIEW);
-        btn1_2.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx271bedf2ce298d26&redirect_uri=http://3813t60g36.zicp.vip/ptdj&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect");
+        btn1_2.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx271bedf2ce298d26&redirect_uri=http://wxtest.iot-chuanglin.com:8022/ptdj&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect");
         btn1_2.setKey(MenuKey.HUAYU_SONG);
         btn1_2.setName("平台登记5");
 
         WxMenu.WxMenuButton btn1_3 = new WxMenu.WxMenuButton();
         btn1_3.setType(WxConsts.MENU_BUTTON_VIEW);
-        btn1_3.setUrl("http://wxdj.iot-chuanglin.com/");
+        btn1_3.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx271bedf2ce298d26&redirect_uri=http://wxtest.iot-chuanglin.com:8022&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect");
         btn1_3.setKey(MenuKey.NET_HOT_SONG);
-        btn1_3.setName("电信解绑");
+        btn1_3.setName("电信解绑2");
 
         WxMenu.WxMenuButton btn1_4 = new WxMenu.WxMenuButton();
         btn1_4.setType(WxConsts.MENU_BUTTON_VIEW);
-        btn1_4.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx271bedf2ce298d26&redirect_uri=http://3813t60g36.zicp.vip/ptdj/CardQuery&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect");
+//        btn1_4.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx271bedf2ce298d26&redirect_uri=http://wxtest.iot-chuanglin.com:8022/ptdj/CardQuery&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect");
+        btn1_4.setUrl("http://front.iot-chuanglin.com/#/noBindInput");
         btn1_4.setKey(MenuKey.PTDJ_CARDQUERY);
-        btn1_4.setName("卡平台信息查询");
+        btn1_4.setName("卡充值2");
 
 
 

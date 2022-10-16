@@ -20,7 +20,14 @@
     String cardStatus="";
     String djpt="";
     String nickname=request.getParameter("nickname");
+    System.out.println("inValidTime:" + inValidTime );
+    if(ICCID.equals("null"))
+    {
+        ICCID="";
+    }
     System.out.println("CardQueryInfo.jsp nickname:" + nickname + " openid:" + openid);
+    //连接MySQL数据库
+    DbHelper db= new DbHelper();
 %>
 
 <%request.setCharacterEncoding("UTF-8");%>
@@ -33,16 +40,12 @@
     <title>卡片查询</title>
 </head>
 <body>
-<%
-    //连接MySQL数据库
-    DbHelper db= new DbHelper();
-%>
 <main style="background:#fff;text-align:center;">
     <form enctype="multipart/form-data" method="get" name="cardinfo" action="/ptdj/CardQueryInfo">
         <input type="hidden" id="openid" name="openid" value="<%=openid%>">
         <input type="hidden" id="nickname" name="nickname" value="<%=nickname%>">
-        &nbsp;<input name="iccid" class="btn1" placeholder="请输入卡号或ICCID号" ><input type="submit" class="btn" value="查询" name="bntQuery">
-    </form>
+        &nbsp;<input name="iccid" class="btn1" placeholder="请输入卡号或ICCID号" value="<%=ICCID%>" ><input type="submit" class="btn" value="查询" name="bntQuery">
+        <form/>
     <%
         //把表格第二行的显示放到while循环中，就可以根据查询结果画出表格了。参数则放在<td>内的相应位置。
         String sql="SELECT `card_info_ptdj`.`ICCID_CODE` AS `ICCID_CODE`,`card_info_ptdj`.`ACCESS_CODE` AS `ACCESS_CODE`,ifnull( `card_info_ptdj`.`PTID`, '' ) AS `DJPT`,ifnull(`card_info`.`CARD_STATUS`,'') AS `CARD_STATUS`  FROM `card_info_ptdj` LEFT JOIN `card_info` ON `card_info`.`ICCID_CODE` = `card_info_ptdj`.`ICCID_CODE` where  `card_info_ptdj`.`ICCID_CODE`='" + ICCID + "'";
@@ -54,14 +57,16 @@
                     cardStatus = "待初始化";
                     break;
                 case "2":
-                    cardStatus = "待启用";
+                    cardStatus = "使用中";
                     break;
                 case "3":
-                    cardStatus = "待实名审核";
+                    cardStatus = "使用中";
                     break;
                 case "4":
                     cardStatus = "使用中";
                     break;
+                case "6":
+                    cardStatus= "停机";
                 default:
                     break;
             }
@@ -191,8 +196,6 @@
             <td style="width:200px"><%=inValidTime%></td>
         </tr>
     </table>
-<%--    <button type="submit" class="btn1" formaction="/ptdj/directorderflowpackage">查询记录</button><br>--%>
-
     <%}
 //注意"}"的位置 %>
 
@@ -226,4 +229,13 @@
     }
 </style>
 </body>
+<%--<script>--%>
+<%--    function queryCardAgentInvalidQuotaListExport(form)--%>
+<%--    {--%>
+<%--        showUniProgressbar();--%>
+<%--        form.action ='/ptdj/CardQueryInfo'--%>
+<%--        form.submit();--%>
+<%--    }--%>
+
+<%--</script>--%>
 </html>

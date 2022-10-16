@@ -19,6 +19,9 @@ import com.soecode.wxDemo.telecom.chinatelecom.util.JSONUtils;
 import com.soecode.wxDemo.utils.HttpGetUtil;
 import com.soecode.wxDemo.utils.StringUtil;
 import com.soecode.wxDemo.utils.XmlParseUtil;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 public abstract class ChinaTelApi {
     protected static String api_queryaware_prefix = "http://api.ct10649.com:9001/m2m_ec/query.do?method=";
@@ -227,6 +230,7 @@ public abstract class ChinaTelApi {
         Map<String, String> extraParameterMap = new HashMap();
         Map<String, Object> onlineStatusMap=null;
         String onlineStatus = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
+        System.out.println("卡状态查询测试:" + onlineStatus );
         if (onlineStatus != null ) {
             onlineStatusMap = (HashMap<String, Object>) JSONUtils.jsonParse(onlineStatus);
             if(onlineStatusMap.get("imei")!=null) {
@@ -239,19 +243,19 @@ public abstract class ChinaTelApi {
     }
 
 
-//    public String queryTraffic(String access_number, boolean withDetail) throws DocumentException {
-//        Map<String, String> extraParameterMap = new HashMap();
-//        extraParameterMap.put("needDtl", withDetail ? "1" : "0");
-//        String traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
-//        if (traffic != null && traffic.startsWith("100008")) {
-//            extraParameterMap.put("needDtl", "0");
-//            traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
-//        }
-//
-//        Element bytes = ((Element)DocumentHelper.parseText(traffic).getRootElement().elements().get(0)).element("TOTAL_BYTES_CNT");
-//        String used = bytes.getTextTrim();
-//        return used.replace("MB", "");
-//    }
+    public String queryTraffic(String access_number, boolean withDetail) throws DocumentException {
+        Map<String, String> extraParameterMap = new HashMap();
+        extraParameterMap.put("needDtl", withDetail ? "1" : "0");
+        String traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
+        if (traffic != null && traffic.startsWith("100008")) {
+            extraParameterMap.put("needDtl", "0");
+            traffic = this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), extraParameterMap);
+        }
+        System.out.println(traffic);
+        Element bytes = ((Element) DocumentHelper.parseText(traffic).getRootElement().elements().get(0)).element("TOTAL_BYTES_CNT");
+        String used = bytes.getTextTrim();
+        return used.replace("MB", "");
+    }
 
     public String prodInstQuery(String access_number) {
         return this.apiQuery(access_number, Thread.currentThread().getStackTrace()[1].getMethodName(), (Map)null);

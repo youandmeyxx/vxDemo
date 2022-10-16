@@ -1,5 +1,6 @@
 package com.soecode.wxDemo.doAction;
 
+import com.soecode.wxDemo.MyWxService;
 import com.soecode.wxDemo.constants.Template;
 import com.soecode.wxtools.api.IService;
 import com.soecode.wxtools.api.WxService;
@@ -39,7 +40,7 @@ public class TemplateSenderAction {
         Template.TemplateData keyword2 = new Template.TemplateData(keyword2Str,colorStr);
         Template.TemplateData keyword3 = new Template.TemplateData(keyword3Str,colorStr);
         Template.TemplateData remark = new Template.TemplateData(remarkStr,colorStr);
-        IService iService = new WxService();
+        MyWxService iService = new MyWxService();
         TemplateSender sender = new TemplateSender();
         sender.setTouser(openid);
         sender.setTemplate_id("B1XXw0se3I7KtPAk74Ka-hXTWtzdsjI_9Qhl3-tBTaQ");

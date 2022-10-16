@@ -6,7 +6,7 @@ public class DbHelper {
    static String  username = "iot";  //数据库用户名
    static String password = "IOT9r9a9y!@#";//数据库密码
    static String url = "jdbc:mysql://120.26.97.0:3306/iot?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true";
-   Connection conn;
+   Connection conn=null;
    /**
     * 设置驱动
     */
@@ -36,7 +36,9 @@ public class DbHelper {
     * @throws SQLException
     */
    public ResultSet executeQuery(String sql) throws SQLException {
-      conn = getConnection();
+      if(conn==null) {
+         conn = getConnection();
+      }
       Statement statement = conn.createStatement();
       ResultSet resultSet_01 = statement.executeQuery(sql);
 
@@ -50,13 +52,18 @@ public class DbHelper {
     * @throws SQLException
     */
    public boolean execute(String sql) throws SQLException{
-      conn = getConnection();
+      if(conn==null) {
+         conn = getConnection();
+      }
       Statement statement = conn.createStatement();
       boolean isSucess = statement.execute(sql);
       return isSucess;
    }
    public void close() throws SQLException {
-      conn.close();
+      if(conn!=null) {
+         conn.close();
+         conn = null;
+      }
    }
      public static void main(String[] args) throws ClassNotFoundException, SQLException {
         //1.加载驱动

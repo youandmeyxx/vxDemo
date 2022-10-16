@@ -30,6 +30,7 @@ public class CardQueryAction extends BaseAction {
     static double usedFlow=0;
     static double leftFlow=0;
     static String imei="" ;
+    static String msg="";
 
     private ResultSet getCardinfo(String iccid) throws SQLException {
         String sql="select * from card_info where iccid_code='" + iccid +  "'";
@@ -105,6 +106,7 @@ public class CardQueryAction extends BaseAction {
             if(rs2.next()){
                 packageid=rs2.getInt("PACKAGE_ID");
                 inValidTime=rs2.getString("INVALID_TIME");
+
             }else{
                 rs3=db.executeQuery(sqlrs3);
                 packageid=rs3.getInt("INITIAL_FLOW_PACKAGE_ID");
@@ -124,7 +126,8 @@ public class CardQueryAction extends BaseAction {
 
         System.out.println(iccid);
         //跳转页面
-        String testUrl="/CardQuery.jsp?openid=" + openid + "&nickname="+ nickname+"&iccid=" + iccid + "&packageName=" +packageName+"&inValidTime="+inValidTime+"&usedFlow=" +usedFlow+ "&leftFlow=" +leftFlow + "&imei=" +imei ;
+//        String testUrl="/CardQuery.jsp?openid=" + openid + "&nickname="+ nickname+"&iccid=" + iccid + "&packageName=" +packageName+"&inValidTime="+inValidTime+"&usedFlow=" +usedFlow+ "&leftFlow=" +leftFlow + "&imei=" +imei ;
+        String testUrl="/comment.jsp?openid=" + openid + "&nickname="+ nickname+"&iccid=" + iccid + "&packageName=" +packageName+"&inValidTime="+inValidTime+"&usedFlow=" +usedFlow+ "&leftFlow=" +leftFlow + "&imei=" +imei + "&msg=";
         System.out.println(testUrl);
         System.out.println("卡信息查询入口跳转");
         request.getRequestDispatcher(testUrl).forward(request,response);

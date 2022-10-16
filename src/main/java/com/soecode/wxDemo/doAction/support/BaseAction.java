@@ -22,11 +22,21 @@ public class BaseAction {
         response = vresponse;
     }
 
+    public BaseAction() {
+
+    }
+
     protected void openDb(){
-        db=new DbHelper();
+        try {
+            db = new DbHelper();
+        }catch(Exception e){
+            db = new DbHelper();
+        }
     }
     protected void closeDb() throws SQLException {
-        db.close();
+        if(db!=null) {
+            db.close();
+        }
     }
 
 
@@ -39,7 +49,8 @@ public class BaseAction {
                 "&secret=" + APPSECRET +
                 "&code=" + code +
                 "&grant_type=authorization_code";
-
+//        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET".replace("APPID", WxConfig.getInstance().getAppId()).replace("APPSECRET", WxConfig.getInstance().getAppSecret());
+        System.out.println("请求获取access_token的url:" + url);
         String result = HttpClientUtil.doGet(url);
 
         System.out.println("请求获取access_token:" + result);

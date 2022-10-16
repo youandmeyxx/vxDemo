@@ -54,7 +54,7 @@ public class NtApi extends ChinaTelApi { //南通电信
     public static void main(String... strings) throws Exception {
         Log4jV2Util.initLog4jV2TestEnv();
         // CardInfo cardinfo = new CardInfo();
-        String iccid_number="8986112124403424538";
+        String iccid_number="8986032141200956541";
 
 //        System.out.println((new NtApi()).queryCardMainStatus(iccid_number));
         String IMEIReRecordstr=(new NtApi()).IMEIReRecord(iccid_number);

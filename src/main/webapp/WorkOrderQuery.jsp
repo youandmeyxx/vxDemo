@@ -3,6 +3,7 @@
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
     String workOrderNo=request.getParameter("workOrderNo");
+    String orerType = request.getParameter("orderType");
 %>
 <%request.setCharacterEncoding("UTF-8");%>
 <%response.setCharacterEncoding("UTF-8");%>
@@ -34,8 +35,12 @@
 </tr>
 <%
     //把表格第二行的显示放到while循环中，就可以根据查询结果画出表格了。参数则放在<td>内的相应位置。
-
-    String sql="SELECT * from card_ptdj_history where WORK_ORDER_NO =" + workOrderNo;
+    String sql="";
+    if(orerType.equals("1")) {
+        sql = "SELECT * from card_ptdj_history where WORK_ORDER_NO =" + workOrderNo;
+    }else if(orerType.equals("2")){
+        sql = "SELECT * FROM card_jiebang_history WHERE WORK_ORDER_NO = " + workOrderNo;
+    }
     System.out.println(sql);
     ResultSet rs= db.executeQuery(sql);
 
@@ -51,7 +56,11 @@
 <%
     }
     if (recNo==0){
-        sql="SELECT * from card_ptdj where WORK_ORDER_NO =" + workOrderNo;
+        if(orerType.equals("1")) {
+            sql = "SELECT * from card_ptdj where WORK_ORDER_NO =" + workOrderNo;
+        }else if(orerType.equals("2")){
+            sql = "SELECT * FROM card_jiebang WHERE WORK_ORDER_NO = " + workOrderNo;
+        }
         System.out.println(sql);
         rs= db.executeQuery(sql);
 

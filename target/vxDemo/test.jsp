@@ -3,6 +3,7 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%
+    String path = request.getContextPath();
     String openid=request.getParameter("openid");
     String nickname=request.getParameter("nickname");
     String msg=request.getParameter("msg");
@@ -36,19 +37,11 @@
 //注意"}"的位置 %>
         </select><br><br>
 
-        <button type="submit" class="btn">确认提交</button><br><br>
+        <button id="submit"  type="submit" class="btn" onclick="queryCard(mainForm)">确认提交</button><br><br>
         <button type="submit" class="btn1" formaction="/ptdj/Query">查询记录</button><br>
     </form>
 
 </main>
-
-<script type="text/javascript">
-    var jsmsg="<%=msg%>";
-    if(jsmsg.length>0)
-    {
-        alert(jsmsg);
-    }
-</script>
 
 <style type="text/css" >
     .btn{
@@ -71,7 +64,28 @@
     .btn1:hover{
         background: aquamarine;
     }
+
 </style>
+<script>
+
+    function queryCard(form)
+    {
+        document.getElementById("submit").style.backgroundImage="url(<%= path %>/img/loading.gif)";
+        document.getElementById("submit").style.backgroundRepeat = "no-repeat";
+        document.getElementById("submit").style.backgroundPosition = "center";
+        // document.getElementById("submit").disabled = true;
+        form.submit();
+        document.getElementById("submit").disabled = true;
+    }
+
+    var jsmsg="<%=msg%>";
+    if(jsmsg.length>0)
+    {
+        alert(jsmsg);
+    }
+
+</script>
+
 </body>
 </html>
 

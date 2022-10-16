@@ -1,10 +1,7 @@
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.soecode.wxDemo.doAction.CardQueryAction;
-import com.soecode.wxDemo.doAction.PTDJQueryAction;
-import com.soecode.wxDemo.doAction.PTDJSubmitAction;
-import com.soecode.wxDemo.doAction.TemplateSenderAction;
+import com.soecode.wxDemo.doAction.*;
 import com.soecode.wxDemo.doAction.support.BaseAction;
 import com.soecode.wxDemo.utils.HttpClientUtil;
 import com.soecode.wxtools.api.WxConfig;
@@ -46,8 +43,31 @@ public class routeServlet extends HttpServlet {
         response.setCharacterEncoding ("UTF-8");
         String baseUri = request.getRequestURI();//这个位置进行url判别，看到底是请求什么功能的
 
+        if ( baseUri.endsWith("/jiebang") ) {
+            //如果是登入请求，则进行什么操作
+            baseAction= new BaseAction(request,response);
+            JSONObject usderinfoJSON =baseAction.wxCallBack(request,response);
+            String jiebangUrl="/index.jsp?openid=" + usderinfoJSON.getString("openid") + "&nickname="+ usderinfoJSON.getString("nickname")+"&msg=";
+            request.getRequestDispatcher(jiebangUrl).forward(request,response);
+            System.out.println(jiebangUrl);
+            return;
+        }
+
+        if(baseUri.endsWith("/jiebangsubmit")){
+            JieBangAction jieBangAction = new JieBangAction(request,response);
+            try {
+                jieBangAction.doAction();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //提示后跳转回登记页面
+            System.out.println("平台登记");
+            return;
+        }
+
         if ( baseUri.endsWith("/ptdj") ) {
             //如果是登入请求，则进行什么操作
+
             baseAction= new BaseAction(request,response);
             JSONObject usderinfoJSON =baseAction.wxCallBack(request,response);
             String testUrl="/test.jsp?openid=" + usderinfoJSON.getString("openid") + "&nickname="+ usderinfoJSON.getString("nickname")+"&msg=";
@@ -55,14 +75,27 @@ public class routeServlet extends HttpServlet {
             System.out.println(testUrl);
             return;
         }
+
+        if (baseUri.endsWith("/directorderflow")){
+            //TODO 直接充值通道，根据iccid 跳转充值通道
+            String iccid=request.getParameter("iccid");
+            String testUrl="http://front.iot-chuanglin.com/#/noBindInput";
+//            request.getRequestDispatcher(testUrl).forward(request,response);
+            System.out.println(testUrl);
+        }
         if ( baseUri.endsWith("/submit") ) {
             //TODO 如果是上传请求，则进行什么操作
             PTDJSubmitAction ptdjAction= new PTDJSubmitAction(request,response);
-            ptdjAction.doAction();
+            try {
+                ptdjAction.doAction();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             //提示后跳转回登记页面
             System.out.println("平台登记");
             return;
         }
+
         if(baseUri.endsWith("/Query"))
         {
             request.setCharacterEncoding ("UTF-8");
